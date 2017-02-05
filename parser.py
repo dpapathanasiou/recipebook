@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+
+"""
+parser.py
+
+This module defines an abstract RecipeParser class, which provides
+some basic parsing infrastructure, but ultimately requires each
+source class to implement, since each recipe site adheres to hRecipe
+somewhat differently.
+
+"""
+
+from lxml import etree
+from urlparse import urlsplit
+import json
+import codecs
+import os
+
+from scraper import getUrl
+from settings import ENCODING, OUTPUT_FOLDER
+
+class RecipeParser:
+    def __init__(self, url, pageEncoding=ENCODING):
+        self.url  = url
+        self.html = getUrl(self.url)
+        if self.html is not None:
+            self.encode = pageEncoding
+            self.parser = etree.HTMLParser(encoding=self.encode)
+            self.tree   = etree.HTML(self.html, parser=self.parser)
+        else:
+            raise ValueError('could not fetch data from: ""'+self.url+'""')
+
+    def setSource(self):
+        """Defaults to the 'netloc' portion of the url (can be overridden)"""
+        self.source = urlsplit(self.url).netloc
+
+    def setFilename(self):
+        """Defaults to the last string in the url path, minus '.html|.htm' (can be overridden)"""
+        self.filename = urlsplit(self.url).path.split('/')[-1:][0].lower().replace('.html', '').replace('.htm', '')
+
+    def save(self, data, folder=OUTPUT_FOLDER):
+        """Attempt to write the resulting json data to a text file"""
+        try:
+            f = codecs.open(os.path.join(folder, self.filename), 'w', self.encode)
+            f.write(json.dumps(data))
+            f.close()
+        except (OSError, IOError):
+            print 'could not write recipe json in:', os.path.join(folder, self.filename)
+
+    def getIngredients(self):
+        """Return a list or a map of the recipe ingredients"""
+        raise NotImplementedError('subclasses must override getIngredients()')
+
+    def getDirections(self):
+        """Return a list or a map of the preparation instructions"""
+        raise NotImplementedError('subclasses must override getDirections()')
+
+    def getTags(self):
+        """Return a list of tags for this recipe"""
+        raise NotImplementedError('subclasses must override getTags()')
+
+    def getOtherRecipeLinks(self):
+        """Return a list of other recipes found in the page"""
+        raise NotImplementedError('subclasses must override getOtherRecipeLinks()')
