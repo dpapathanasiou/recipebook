@@ -9,7 +9,6 @@ for parsing recipes from the foodnetwork.com site.
 """
 
 from lxml import etree
-from urlparse import urlsplit
 import re
 
 from parser import RecipeParser
