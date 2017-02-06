@@ -36,16 +36,34 @@ class RecipeParser:
 
     def setFilename(self):
         """Defaults to the last string in the url path, minus '.html|.htm' (can be overridden)"""
-        self.filename = urlsplit(self.url).path.split('/')[-1:][0].lower().replace('.html', '').replace('.htm', '')
+        self.filename = urlsplit(self.url).path.split('/')[-1:][0].lower().replace('.html', '').replace('.htm', '')+'.json'
 
-    def save(self, data, folder=OUTPUT_FOLDER):
+    def compose(self):
+        """Compose the json object of the recipe data"""
+
+        self.setSource()
+        return {
+          'source': self.source,
+          'title': self.getTitle(),
+          'ingredients': self.getIngredients(),
+          'directions': self.getDirections(),
+          'tags': self.getTags(),
+          'url': self.url
+        }
+
+    def save(self, folder=OUTPUT_FOLDER):
         """Attempt to write the resulting json data to a text file"""
+        self.setFilename()
         try:
             f = codecs.open(os.path.join(folder, self.filename), 'w', self.encode)
-            f.write(json.dumps(data))
+            f.write(json.dumps(self.compose()))
             f.close()
         except (OSError, IOError):
             print 'could not write recipe json in:', os.path.join(folder, self.filename)
+
+    def getTitle(self):
+        """Defaults to the <title> string in the html (can be overridden)"""
+        return self.tree.xpath('//title')[0].text.strip()
 
     def getIngredients(self):
         """Return a list or a map of the recipe ingredients"""
