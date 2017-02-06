@@ -10,13 +10,12 @@ for parsing recipes from the foodnetwork.com site.
 
 from lxml import etree
 from urlparse import urlsplit
-import json
 import re
 
 from parser import RecipeParser
 
 class FoodNetwork(RecipeParser):
-    
+
     # define some patterns to match/filter
     credits  = re.compile(r'photograph by', re.I)
     otherURL = re.compile(r'^/recipes/', re.I)
