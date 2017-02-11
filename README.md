@@ -8,7 +8,7 @@ This project was inspired by [this answer](http://opendata.stackexchange.com/a/4
 
 Add your favorite site by implementing a [RecipeParser](parser.py) class with appropriate [lxml etree](http://lxml.de/tutorial.html) definitions of the <tt>getIngredients()</tt>, <tt>getDirections()</tt>, <tt>getTags()</tt>, and <tt>getOtherRecipeLinks()</tt> methods.
 
-Few sites implement hRecipe exactly, though, so study the site's html source code to understand its structure. Also see how the current implementations for [Epicurious](epicurious.py), [FoodNetwork](foodnetwork.py), and [Williams Sonoma](wsonoma.py) were written.
+Few sites implement hRecipe exactly, though, so study the site's html source code to understand its structure. Also see how the current implementations for [AllRecipes](allrecipes.py), [Epicurious](epicurious.py), [FoodNetwork](foodnetwork.py), and [Williams Sonoma](wsonoma.py) were written.
 
 [Pull requests](https://help.github.com/articles/about-pull-requests/) are welcome!
 
@@ -75,7 +75,7 @@ Results in the creation of <tt>/tmp/chocolate-almond-and-banana-parfaits-357369.
 
 ## Crawling
 
-The better sites, such as Epicurious and [FoodNetwork](http://www.foodnetwork.com), offer related links within each recipe.
+The better sites, such as [AllRecipes](http://allrecipes.com/), [Epicurious](http://www.epicurious.com), and [FoodNetwork](http://www.foodnetwork.com), offer related links within each recipe.
 
 It is easy to use those to crawl the entire site automatically.
 
