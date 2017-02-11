@@ -75,7 +75,7 @@ Results in the creation of <tt>/tmp/chocolate-almond-and-banana-parfaits-357369.
 
 ## Crawling
 
-The better sites, such as [AllRecipes](http://allrecipes.com/), [Epicurious](http://www.epicurious.com), and [FoodNetwork](http://www.foodnetwork.com), offer related links within each recipe.
+Most sites, such as [AllRecipes](http://allrecipes.com/), [Epicurious](http://www.epicurious.com), and [FoodNetwork](http://www.foodnetwork.com), offer related links within each recipe.
 
 It is easy to use those to crawl the entire site automatically.
 
