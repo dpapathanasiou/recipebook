@@ -9,10 +9,15 @@ for parsing recipes from the epicurious.com site.
 """
 
 from lxml import etree
+import re
 
 from parser import RecipeParser
 
 class Epicurious(RecipeParser):
+
+    # define some patterns to match/filter
+    badTag = re.compile(ur'Bon App\u00e9tit', re.I)
+
     def getTitle(self):
         """The title format is:
 
@@ -40,8 +45,8 @@ class Epicurious(RecipeParser):
         """Return a list of tags for this recipe"""
         data = []
         for node in self.tree.xpath('//*[@itemprop="recipeCategory"]'):
-            data.append( ''.join(node.xpath('descendant-or-self::text()')).strip() )
-        return data
+            data.append( u''.join(node.xpath('descendant-or-self::text()')).strip() )
+        return filter(lambda x: self.badTag.search(x) is None, data)
 
     def getOtherRecipeLinks(self):
         """Return a list of other recipes found in the page"""
