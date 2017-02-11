@@ -36,7 +36,7 @@ class RecipeParser:
 
     def setFilename(self):
         """Defaults to the last string in the url path, minus '.html|.htm' (can be overridden)"""
-        self.filename = urlsplit(self.url).path.split('/')[-1:][0].lower().replace('.html', '').replace('.htm', '')+'.json'
+        self.filename = filter(None, urlsplit(self.url).path.split('/'))[-1:][0].lower().replace('.html', '').replace('.htm', '')+'.json'
 
     def compose(self):
         """Compose the json object of the recipe data"""
