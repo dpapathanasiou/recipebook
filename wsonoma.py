@@ -35,7 +35,7 @@ class WilliamsSonoma(RecipeParser):
         data = []
         for node in self.tree.xpath('//div[@class="directions"]'):
             data.append( node.xpath('descendant-or-self::text()') )
-        return map(lambda x: x.strip(), data[0])
+        return filter(None, map(lambda x: x.strip(), data[0]))
 
     def getTags(self):
         """Return a list of tags for this recipe"""
