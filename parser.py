@@ -34,6 +34,10 @@ class RecipeParser:
         """Defaults to the 'netloc' portion of the url (can be overridden)"""
         self.source = urlsplit(self.url).netloc
 
+    def setLanguage(self):
+        """Define the IETF language tag of the site contents (defaults to 'en-US' but can be overridden)"""
+        self.language = 'en-US'
+
     def setFilename(self):
         """Defaults to the last string in the url path, minus '.html|.htm' (can be overridden)"""
         self.filename = filter(None, urlsplit(self.url).path.split('/'))[-1:][0].lower().replace('.html', '').replace('.htm', '')+'.json'
@@ -42,8 +46,10 @@ class RecipeParser:
         """Compose the json object of the recipe data"""
 
         self.setSource()
+        self.setLanguage()
         return {
           'source': self.source,
+          'language': self.language,
           'title': self.getTitle(),
           'ingredients': self.getIngredients(),
           'directions': self.getDirections(),

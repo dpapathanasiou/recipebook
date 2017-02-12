@@ -51,6 +51,7 @@ Results in the creation of <tt>/tmp/chocolate-almond-and-banana-parfaits-357369.
         "24 1/3-inch-thick diagonal banana slices (from about 3 bananas)",
         "1/3 cup (about) sliced almonds, toasted"
     ],
+    "language": "en-US",
     "source": "www.epicurious.com",
     "tags": [
         "Chocolate",
