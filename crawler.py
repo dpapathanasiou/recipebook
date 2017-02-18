@@ -11,7 +11,6 @@ results to crawl for other recipes automatically.
 from Queue import Queue
 from threading import Thread
 import sys
-import time
 
 # sites implemented so far
 from allrecipes import AllRecipes
@@ -28,24 +27,8 @@ AVAILABLE = {
   'WilliamsSonoma' : WilliamsSonoma,
 }
 
-class UniqueQueue(Queue):
-    def _init(self, maxsize):
-        Queue._init(self, maxsize)
-        self.all_items = set()
-
-    def _put(self, item):
-        if item not in self.all_items:
-            Queue._put(self, item)
-            self.all_items.add(item)
-
-    def _get(self):
-        return self.queue.pop()
-
-    def has(self, item):
-        item in self.all_items
-
-pending = UniqueQueue()
-fetched = UniqueQueue()
+pending = Queue()
+fetched = Queue()
 
 def site (label):
     """Return the site module corresponding to this label,
@@ -58,7 +41,7 @@ def fetch (src, folder, p, f):
        on the pending queue for other workers to process"""
     while True:
         url = p.get()
-        if f.has(url):
+        if url in f.queue:
             p.task_done()
         else:
             recipe = src(url)
@@ -95,17 +78,15 @@ if __name__ == "__main__":
             except IndexError:
                 pass
 
-            pending.put(sys.argv[2])
             for i in range(threads):
                 worker = Thread(target=fetch, args=(module, folder, pending, fetched,))
                 worker.setDaemon(True)
                 worker.start()
 
-            # give the first worker time to parse the seed url
-            # and put other links on the pending queue
-            time.sleep(10)
-
+            pending.put(sys.argv[2])
             pending.join()
+
+            # show the summary
             print 'Fetched and parsed:'
-            for i, link in enumerate(fetched.get()):
-                print i, link
+            for i, link in enumerate(set(fetched.queue)):
+                print "{:,}".format(1+i), '\t', link
