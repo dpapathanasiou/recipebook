@@ -44,10 +44,13 @@ def fetch (src, folder, p, f):
         if url in f.queue:
             p.task_done()
         else:
-            recipe = src(url)
-            recipe.save(folder)
-            f.put(url)
-            map(lambda x: p.put(x), filter(lambda link: link != url, recipe.getOtherRecipeLinks()))
+            try:
+                recipe = src(url)
+                recipe.save(folder)
+                f.put(url)
+                map(lambda x: p.put(x), filter(lambda link: link != url, recipe.getOtherRecipeLinks()))
+            except ValueError:
+                print '[warning] could not fetch:', url
             p.task_done()
 
 if __name__ == "__main__":
