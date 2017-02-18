@@ -76,9 +76,7 @@ Results in the creation of <tt>/tmp/chocolate-almond-and-banana-parfaits-357369.
 
 ## Crawling
 
-Most sites, such as [AllRecipes](http://allrecipes.com/), [Epicurious](http://www.epicurious.com), and [FoodNetwork](http://www.foodnetwork.com), offer related links within each recipe.
-
-It is easy to use those to crawl the entire site automatically.
+Most sites offer related links within each recipe.
 
 From the example above, the <tt>getOtherRecipeLinks()</tt> method produces more URLs to fetch:
 
@@ -87,4 +85,20 @@ From the example above, the <tt>getOtherRecipeLinks()</tt> method produces more 
 ['http://www.epicurious.com/recipes/food/views/chocolate-amaretto-souffles-104730', 'http://www.epicurious.com/recipes/food/views/coffee-almond-ice-cream-cake-with-dark-chocolate-sauce-11036', 'http://www.epicurious.com/recipes/food/views/toasted-almond-mocha-ice-cream-tart-12550', 'http://www.epicurious.com/recipes/food/views/chocolate-marble-cheesecake-241488', 'http://www.epicurious.com/recipes/food/views/hazelnut-dome-cake-4246']
 ```
 
-Each of those links will also have related links. By keeping track of which have already been visited, a simple crawler can pull most of the recipes on the site with one command.
+The [crawler.py](crawler.py) application takes advantage of this by visiting each related recipe link in parallel, getting even more recipe links, fetching each of those, and so on.
+
+Kick it off with a specific site and an initial seed link, and it will automatically fetch and parse all the related links it finds, without repeating the same link twice.
+
+From the example above, here is how to start the crawler with four parallel worker threads:
+
+```sh
+python crawler.py Epicurious "http://www.epicurious.com/recipes/food/views/Chocolate-Almond-and-Banana-Parfaits-357369" 4
+```
+
+By default, all the json files are written to the <tt>/tmp</tt> folder, but this can be changed by passing a fourth argument.
+
+Here is the crawler usage:
+
+```sh
+python crawler.py [site: (AllRecipes|Epicurious|FoodNetwork|SiroGohan|WilliamsSonoma)] [seed url (containing other links)] [threads] [output folder (optional: defaults to "/tmp")]
+```
