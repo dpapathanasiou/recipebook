@@ -104,5 +104,5 @@ By default, all the json files are written to the <tt>/tmp</tt> folder, but this
 Here is the crawler usage:
 
 ```sh
-python crawler.py [site: (AllRecipes|Epicurious|FoodNetwork|SiroGohan|WilliamsSonoma)] [file of seed urls] [threads] [output folder (optional: defaults to "/tmp")]
+python crawler.py [site: (AllRecipes|Epicurious|FoodNetwork|Saveur|SiroGohan|WilliamsSonoma)] [file of seed urls] [threads] [output folder (optional: defaults to "/tmp")]
 ```

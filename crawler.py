@@ -16,6 +16,7 @@ import sys
 from allrecipes import AllRecipes
 from epicurious import Epicurious
 from foodnetwork import FoodNetwork
+from saveur import Saveur
 from sirogohan import SiroGohan
 from wsonoma import WilliamsSonoma
 
@@ -24,6 +25,7 @@ AVAILABLE = {
   'Epicurious' : Epicurious,
   'FoodNetwork' : FoodNetwork,
   'SiroGohan' : SiroGohan,
+  'Saveur' : Saveur,
   'WilliamsSonoma' : WilliamsSonoma,
 }
 
@@ -58,8 +60,9 @@ if __name__ == "__main__":
 
     if len(sys.argv) < 4:
         # Define the usage
+        possibleSources = sorted(AVAILABLE.keys())
         print sys.argv[0], \
-          '[site: (AllRecipes|Epicurious|FoodNetwork|SiroGohan|WilliamsSonoma)]', \
+          '[site: (' + u'|'.join(possibleSources) +')]', \
           '[file of seed urls]', \
           '[threads]', \
           '[output folder (optional: defaults to "/tmp")]'
