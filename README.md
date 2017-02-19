@@ -87,12 +87,16 @@ From the example above, the <tt>getOtherRecipeLinks()</tt> method produces more 
 
 The [crawler.py](crawler.py) application takes advantage of this by visiting each related recipe link in parallel, getting even more recipe links, fetching each of those, and so on.
 
-Kick it off with a specific site and an initial seed link, and it will automatically fetch and parse all the related links it finds, without repeating the same link twice.
+Kick it off with a specific site and a file of initial seed links, and it will automatically fetch and parse all the related links it finds, without repeating the same link twice.
 
-From the example above, here is how to start the crawler with four parallel worker threads:
+From the example above, here is how to start the crawler with four parallel worker threads.
+
+The file <tt>/tmp/epi.link</tt> passed in the second argument contains the seed URL <tt>http://www.epicurious.com/recipes/food/views/Chocolate-Almond-and-Banana-Parfaits-357369</tt> for this example, though it could contain more links, too.
+
+It is also a good idea to capture the output into a log file, as shown here, in order to see the full list of parsed recipes, along with any error messages.
 
 ```sh
-python crawler.py Epicurious "http://www.epicurious.com/recipes/food/views/Chocolate-Almond-and-Banana-Parfaits-357369" 4
+python crawler.py Epicurious /tmp/epi.link 4 > epicurious.log 2>&1
 ```
 
 By default, all the json files are written to the <tt>/tmp</tt> folder, but this can be changed by passing a fourth argument.
@@ -100,5 +104,5 @@ By default, all the json files are written to the <tt>/tmp</tt> folder, but this
 Here is the crawler usage:
 
 ```sh
-python crawler.py [site: (AllRecipes|Epicurious|FoodNetwork|SiroGohan|WilliamsSonoma)] [seed url (containing other links)] [threads] [output folder (optional: defaults to "/tmp")]
+python crawler.py [site: (AllRecipes|Epicurious|FoodNetwork|SiroGohan|WilliamsSonoma)] [file of seed urls] [threads] [output folder (optional: defaults to "/tmp")]
 ```
