@@ -60,7 +60,7 @@ if __name__ == "__main__":
         # Define the usage
         print sys.argv[0], \
           '[site: (AllRecipes|Epicurious|FoodNetwork|SiroGohan|WilliamsSonoma)]', \
-          '[seed url (containing other links)]', \
+          '[file of seed urls]', \
           '[threads]', \
           '[output folder (optional: defaults to "/tmp")]'
     else:
@@ -86,7 +86,11 @@ if __name__ == "__main__":
                 worker.setDaemon(True)
                 worker.start()
 
-            pending.put(sys.argv[2])
+            # load the file of initial urls and seed the pending queue
+            with open(sys.argv[2], 'r') as f:
+                links = f.read()
+                map(lambda link: pending.put(link), links.splitlines())
+
             pending.join()
 
             # show the summary
