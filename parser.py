@@ -24,10 +24,12 @@ class RecipeParser:
         self.url  = url
         self.html = getUrl(self.url)
         if self.html is not None:
+            self.valid  = True
             self.encode = pageEncoding
             self.parser = etree.HTMLParser(encoding=self.encode)
             self.tree   = etree.HTML(self.html, parser=self.parser)
         else:
+            self.valid = False
             raise ValueError('could not fetch data from: ""'+self.url+'""')
 
     def setSource(self):
@@ -59,13 +61,17 @@ class RecipeParser:
 
     def save(self, folder=OUTPUT_FOLDER):
         """Attempt to write the resulting json data to a text file"""
-        self.setFilename()
-        try:
-            f = codecs.open(os.path.join(folder, self.filename), 'w', self.encode)
-            f.write(json.dumps(self.compose()))
-            f.close()
-        except (OSError, IOError):
-            print 'could not write recipe json in:', os.path.join(folder, self.filename)
+
+        data = json.dumps(self.compose(), indent=4, sort_keys=True)
+        if not self.valid:
+            print '[error] invalid data at:', self.url
+        else:
+            self.setFilename()
+            try:
+                with codecs.open(os.path.join(folder, self.filename), 'w', self.encode) as f:
+                    f.write(data)
+            except (OSError, IOError):
+                print '[error] could not write recipe json in:', os.path.join(folder, self.filename)
 
     def getTitle(self):
         """Defaults to the <title> string in the html (can be overridden)"""

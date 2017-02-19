@@ -37,29 +37,33 @@ class FoodNetwork(RecipeParser):
         try:
             # use the json object data
             return self.recipeJSON['name']
-        except KeyError:
-            # fall back to parsing the html title
-            return self.tree.xpath('//title')[0].text.split('|')[0].strip()
+        except (AttributeError, KeyError) as e:
+            print '[warning]: likely no recipe at', self.url
+            # fall back to parsing the html title, which is colon-separated
+            return self.tree.xpath('//title')[0].text.split(':')[0].strip()
 
     def getIngredients(self):
         """Return a list or a map of the recipe ingredients"""
         try:
             return filter(None, map(lambda x: x.strip(), self.recipeJSON['recipeIngredient']))
-        except KeyError:
+        except (AttributeError, KeyError):
+            self.valid = False
             return []
 
     def getDirections(self):
         """Return a list or a map of the preparation instructions"""
         try:
             return filter(None, map(lambda x: x.strip(), self.recipeJSON['recipeInstructions']))
-        except KeyError:
+        except (AttributeError, KeyError):
+            self.valid = False
             return []
 
     def getTags(self):
         """Return a list of tags for this recipe"""
         try:
             return filter(None, map(lambda x: x.strip(), self.recipeJSON['recipeCategory']))
-        except KeyError:
+        except (AttributeError, KeyError):
+            self.valid = False
             return []
 
     def getOtherRecipeLinks(self):
