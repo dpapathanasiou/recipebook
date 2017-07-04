@@ -16,13 +16,13 @@ import json
 import codecs
 import os
 
-from scraper import getUrl
+import restClient
 from settings import ENCODING, OUTPUT_FOLDER
 
 class RecipeParser:
     def __init__(self, url, pageEncoding=ENCODING):
         self.url  = url
-        self.html = getUrl(self.url)
+        self.html = restClient.get(self.url)
         if self.html is not None:
             self.valid  = True
             self.encode = pageEncoding
