@@ -57,7 +57,6 @@ def put (url, data, headers={}):
     try:
         curl.perform()
         reply = curl.getinfo(pycurl.HTTP_CODE)
-        data = databuffer.getvalue()
     except Exception:
         pass
     curl.close()
