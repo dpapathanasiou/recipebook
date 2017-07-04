@@ -44,7 +44,7 @@ def put (url, data, headers={}):
     """Make a PUT request to the url, using data in the message body,
     with the additional headers, if any"""
 
-    reply = -1
+    reply = -1 # default, non-http response
 
     curl = pycurl.Curl()
     curl.setopt(pycurl.URL, url)
