@@ -74,7 +74,7 @@ class RecipeParser:
             except (OSError, IOError):
                 print '[error] could not write recipe json in:', os.path.join(folder, self.filename)
 
-    def store(self, mongoService=ARMS):
+    def store(self, database, collection, mongoService=ARMS):
         """Attempt to store the resulting json data on a RESTful mongo service"""
 
         if len(filter(None, mongoService.values())) != 3:
@@ -88,9 +88,10 @@ class RecipeParser:
                   'API-KEY'  : mongoService['API-KEY'],
                   'API-TOTP' : totpGenerator.create(mongoService['API-SEED'])
                 }
-                result = restClient.put(mongoService['SERVER'], data, headers)
+                target = '/'.join([mongoService['SERVER'], database, collection])
+                result = restClient.put(target, data, headers)
                 if result not in range(200,205):
-                    print '[error] could not PUT', self.url, 'to', mongoService['SERVER'], ':', result
+                    print '[error] could not PUT', self.url, 'to', target, ':', result
 
     def getTitle(self):
         """Defaults to the <title> string in the html (can be overridden)"""
