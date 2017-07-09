@@ -21,6 +21,7 @@ Import the class corresponding to the site you want, and use the recipe URL in i
 Here's an example to fetch and parse the [Chocolate, Almond, and Banana Parfaits](http://www.epicurious.com/recipes/food/views/Chocolate-Almond-and-Banana-Parfaits-357369) recipe from [Epicurious](http://www.epicurious.com/):
 
 ```python
+>>> import sys; sys.path.append('sites')
 >>> from epicurious import Epicurious
 >>> recipe = Epicurious("http://www.epicurious.com/recipes/food/views/Chocolate-Almond-and-Banana-Parfaits-357369")
 ```
