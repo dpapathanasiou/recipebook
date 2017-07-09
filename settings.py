@@ -8,7 +8,7 @@ file which is excluded from source control.
 """
 
 ENCODING = 'utf-8'
-UA = "recipebook/1.3 +http://github.com/dpapathanasiou/recipebook"
+UA = "recipebook/1.4 +http://github.com/dpapathanasiou/recipebook"
 
 # Define where the scraped and parsed results will be saved
 OUTPUT_FOLDER = '/tmp'
