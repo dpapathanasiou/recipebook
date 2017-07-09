@@ -22,7 +22,7 @@ Here's an example to fetch and parse the [Chocolate, Almond, and Banana Parfaits
 
 Use the <tt>save()</tt> method to create a file of the recipe in json object.
 
-The file name is determined from the URL, and the output folder is defined in the [settings.py](settings.py) file (it is <tt>/tmp/</tt> by default)):
+The file name is determined from the URL, and the output folder is defined in the [settings.py](settings.py) file as <tt>OUTPUT_FOLDER</tt>, and can be overridden by creating a local_settings.py file:
 
 ```python
 >>> recipe.save()
@@ -94,10 +94,12 @@ It is also a good idea to capture the output into a log file, as shown here, in 
 python crawler.py Epicurious /tmp/epi.link 4 > epicurious.log 2>&1
 ```
 
-By default, all the json files are written to the <tt>/tmp</tt> folder, but this can be changed by passing a fourth argument.
+By default, all the json files are written to the <tt>OUTPUT_FOLDER</tt> folder specified in [settings.py](settings.py) local_settings.py, but this can be changed by passing a fourth argument: "False" or "F" (in either upper or lower case) will prevent the individual recipes from being written to to the <tt>OUTPUT_FOLDER</tt> folder at all.
 
-Here is the crawler usage:
+Similarly, storing the results to a [ARMS mongo service](https://github.com/dpapathanasiou/ARMS) is off by default, but if the fifth and sixth arguments specify a database and collection, respectively, the crawler will attempt to store them, using the <tt>ARMS</tt> server, api key and seed definitions in [settings.py](settings.py) or local_settings.py.
+
+Here is the crawler usage in full:
 
 ```sh
-python crawler.py [site: (AllRecipes|Epicurious|FoodNetwork|Saveur|SiroGohan|WilliamsSonoma)] [file of seed urls] [threads] [output folder (optional: defaults to "/tmp")]
+python crawler.py [site: (AllRecipes|Epicurious|FoodNetwork|Saveur|SiroGohan|WilliamsSonoma)] [file of seed urls] [threads] [save() (defaults to True)] [store() database (defaults to None)] [store() collection (defaults to None)]
 ```

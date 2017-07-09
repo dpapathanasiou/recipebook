@@ -38,7 +38,7 @@ def site (label):
        defaulting to None if not available"""
     return AVAILABLE.get(label, None)
 
-def fetch (src, folder, p, f):
+def fetch (src, save, db, collection, p, f):
     """This is the worker function to get the next recipe from
        the pending queue, save it, and put all the related urls
        on the pending queue for other workers to process"""
@@ -49,7 +49,10 @@ def fetch (src, folder, p, f):
         else:
             try:
                 recipe = src(url)
-                recipe.save(folder)
+                if save:
+                    recipe.save()
+                if db is not None and collection is not None:
+                    recipe.store(db, collection)
                 f.put(url)
                 map(lambda x: p.put(x), filter(lambda link: link != url, recipe.getOtherRecipeLinks()))
             except ValueError:
@@ -66,7 +69,9 @@ if __name__ == "__main__":
           '[site: (' + u'|'.join(possibleSources) +')]', \
           '[file of seed urls]', \
           '[threads]', \
-          '[output folder (optional: defaults to "/tmp")]'
+          '[save() (defaults to True)]', \
+          '[store() database (defaults to None)]', \
+          '[store() collection (defaults to None)]'
     else:
         # Do the deed
         module = site(sys.argv[1])
@@ -79,14 +84,23 @@ if __name__ == "__main__":
             except ValueError:
                 pass
 
-            folder ='/tmp'
+            save = True
             try:
-                folder = sys.argv[4]
+                saveReq = sys.argv[4].lower()
+                save = saveReq.startswith('t') or saveReq == 'true'
+            except IndexError:
+                pass
+
+            db = None
+            collection = None
+            try:
+                db = sys.argv[5]
+                collection = sys.argv[6]
             except IndexError:
                 pass
 
             for i in range(threads):
-                worker = Thread(target=fetch, args=(module, folder, pending, fetched,))
+                worker = Thread(target=fetch, args=(module, save, db, collection, pending, fetched,))
                 worker.setDaemon(True)
                 worker.start()
 
