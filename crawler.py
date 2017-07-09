@@ -11,6 +11,7 @@ results to crawl for other recipes automatically.
 from Queue import Queue
 from threading import Thread
 import sys
+sys.path.append('sites')
 
 # sites implemented so far
 from allrecipes import AllRecipes
