@@ -9,6 +9,8 @@ file which is excluded from source control.
 
 ENCODING = 'utf-8'
 UA = "recipebook/1.4 +http://github.com/dpapathanasiou/recipebook"
+PAUSE_CRAWLER = True
+PAUSE_TIME_RANGE = (10, 60)
 
 # Define where the scraped and parsed results will be saved
 OUTPUT_FOLDER = '/tmp'

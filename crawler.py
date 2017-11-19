@@ -10,6 +10,9 @@ results to crawl for other recipes automatically.
 
 from Queue import Queue
 from threading import Thread
+from random import seed, randint
+from time import sleep
+from settings import PAUSE_CRAWLER, PAUSE_TIME_RANGE
 import sys
 sys.path.append('sites')
 
@@ -58,6 +61,9 @@ def fetch (src, save, db, collection, p, f):
             except ValueError:
                 print '[warning] could not fetch:', url
             p.task_done()
+            if PAUSE_CRAWLER:
+                # pause a random interval between PAUSE_TIME_RANGE seconds before continuing
+                sleep(randint(PAUSE_TIME_RANGE[0], PAUSE_TIME_RANGE[1]))
 
 if __name__ == "__main__":
     """Create a command-line main() entry point"""
@@ -74,6 +80,9 @@ if __name__ == "__main__":
           '[store() collection (defaults to None)]'
     else:
         # Do the deed
+        if PAUSE_CRAWLER:
+            seed()
+
         module = site(sys.argv[1])
         if module is None:
             print 'Sorry, that site is not yet available'
