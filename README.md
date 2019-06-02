@@ -6,6 +6,10 @@ This project was inspired by [this answer](http://opendata.stackexchange.com/a/4
 
 [Contribute](sites/README.md) your favorite site by implementing a [RecipeParser](parser.py) class for it, and make a [pull request](https://help.github.com/articles/about-pull-requests/).
 
+# Data
+
+Recipes collected using the crawler are now available in a [parallel repository](https://github.com/dpapathanasiou/recipes): https://github.com/dpapathanasiou/recipes
+
 # Usage
 
 ## Individual recipes
