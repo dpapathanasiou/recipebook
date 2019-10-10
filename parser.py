@@ -54,6 +54,7 @@ class RecipeParser:
           'source': self.source,
           'language': self.language,
           'title': self.getTitle(),
+          'image': self.getImage(),
           'ingredients': self.getIngredients(),
           'directions': self.getDirections(),
           'tags': self.getTags(),
@@ -96,6 +97,10 @@ class RecipeParser:
     def getTitle(self):
         """Defaults to the <title> string in the html (can be overridden)"""
         return self.tree.xpath('//title')[0].text.strip()
+
+    def getImage(self):
+        """Return the main image url of the recipe"""
+        raise NotImplementedError('subclasses must override getImage()')
 
     def getIngredients(self):
         """Return a list or a map of the recipe ingredients"""
