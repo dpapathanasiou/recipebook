@@ -27,6 +27,15 @@ class Epicurious(RecipeParser):
         """
         return u' '.join(self.tree.xpath('//title')[0].text.split('|')[0].strip().split()[:-1])
 
+    def getImage(self):
+        """The image format is:
+
+        <meta property="og:image" content="IMG_URL">
+
+        we want just 'IMG_URL'
+        """
+        return self.tree.xpath('//meta[@property="og:image"]')[0].get('content')
+
     def getIngredients(self):
         """Return a list or a map of the recipe ingredients"""
         data = []
