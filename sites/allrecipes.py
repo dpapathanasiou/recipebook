@@ -8,14 +8,13 @@ for parsing recipes from the allrecipes.com site.
 
 """
 
-from lxml import etree
 import json
 import re
 
 from parser import RecipeParser
 
-class AllRecipes(RecipeParser):
 
+class AllRecipes(RecipeParser):
     # define some patterns to match/filter
     otherURL = re.compile(r'^/recipe/', re.I)
 
@@ -41,7 +40,7 @@ class AllRecipes(RecipeParser):
         """Return a list or a map of the recipe ingredients"""
         data = []
         for node in self.tree.xpath('//span[@itemprop="ingredients"]'):
-            data.append( ''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getDirections(self):
@@ -49,7 +48,7 @@ class AllRecipes(RecipeParser):
         data = []
         for node in self.tree.xpath('//ol[@itemprop="recipeInstructions"][li]'):
             for item in node:
-                data.append( ''.join(item.xpath('descendant-or-self::text()')).strip() )
+                data.append(''.join(item.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getTags(self):
@@ -58,7 +57,7 @@ class AllRecipes(RecipeParser):
 
     def getOtherRecipeLinks(self):
         """Return a list of other recipes found in the page"""
-        data = {} # k = recipe id, v = recipe url
+        data = {}  # k = recipe id, v = recipe url
 
         # type one: similar recipes carousel (page bottom)
         for link in self.tree.xpath('//ul[@class="recipe-carousel"]/li[@class="slider-card"]/*/a'):
@@ -76,9 +75,9 @@ class AllRecipes(RecipeParser):
             if 'my-feed-data' in node.keys():
                 feed = json.loads(node.get('my-feed-data'))
                 for item in feed['items']:
-                    if item.has_key('id'):
+                    if 'id' in item:
                         recipeId = str(item['id'])
-                        if not data.has_key(recipeId):
+                        if recipeId not in data:
                             # these links are less descriptive,
                             # so we do not want them over-writing
                             # any pre-existing with the same id
