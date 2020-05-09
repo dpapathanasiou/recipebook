@@ -8,9 +8,11 @@ This project was inspired by [this answer](http://opendata.stackexchange.com/a/4
 
 # Data
 
-Recipes collected using the crawler are now available in a [parallel repository](https://github.com/dpapathanasiou/recipes): https://github.com/dpapathanasiou/recipes
+Recipes collected using the crawler are now available in a [parallel repository](https://github.com/dpapathanasiou/recipes).
 
 # Usage
+
+The current version uses [Python 3](https://docs.python.org/3/), which is easily installed with [Anaconda](https://www.anaconda.com): use the `Python 3.x` [command line installer](https://www.anaconda.com/products/individual), and optionally, the [PyCharm IDE](https://www.anaconda.com/pycharm) (the community edition is free).
 
 ## Individual recipes
 
