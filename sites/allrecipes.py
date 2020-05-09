@@ -40,7 +40,7 @@ class AllRecipes(RecipeParser):
         """Return a list or a map of the recipe ingredients"""
         data = []
         for node in self.tree.xpath('//span[@itemprop="recipeIngredient"]'):
-            data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
+                data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getDirections(self):
@@ -60,15 +60,15 @@ class AllRecipes(RecipeParser):
         data = {}  # k = recipe id, v = recipe url
 
         # type one: similar recipes carousel (page bottom)
-        for link in self.tree.xpath('//ul[@class="recipe-carousel"]/li[@class="slider-card"]/*/a'):
+        for link in self.tree.xpath('//div[@id="similarRecipes"]/div[@class="slider-card"]/a'):
             if 'href' in link.keys():
                 href = link.get('href')
-                if self.otherURL.search(href):
-                    parts = href.split('/')
-                    try:
-                        data[parts[2]] = 'http://allrecipes.com' + href
-                    except IndexError:
-                        pass
+                parts = href.split('/')
+                try:
+                    if 'recipe' == parts[3]:
+                        data[parts[4]] = href
+                except IndexError:
+                    pass
 
         # type two: json embedded in the right side panel
         for node in self.tree.xpath('//right-rail-feed'):
