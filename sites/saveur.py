@@ -8,16 +8,15 @@ for parsing recipes from the saveur.com site.
 
 """
 
-from lxml import etree
 import re
 
 from parser import RecipeParser
 
-class Saveur(RecipeParser):
 
+class Saveur(RecipeParser):
     # define some patterns to match/filter
     issueTag = re.compile(r'Issue', re.I)
-    tagHREF  = re.compile(r'^/tags/', re.I)
+    tagHREF = re.compile(r'^/tags/', re.I)
 
     def getTitle(self):
         """The title format is:
@@ -41,14 +40,14 @@ class Saveur(RecipeParser):
         """Return a list or a map of the recipe ingredients"""
         data = []
         for node in self.tree.xpath('//div[@property="ingredients"]'):
-            data.append( ''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getDirections(self):
         """Return a list or a map of the preparation instructions"""
         data = []
         for node in self.tree.xpath('//div[@property="recipeInstructions"]'):
-            data.append( ''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getTags(self):
@@ -65,4 +64,4 @@ class Saveur(RecipeParser):
 
     def getOtherRecipeLinks(self):
         """Return a list of other recipes found in the page"""
-        return [] # unfortunately these are javascript-enabled by user interaction
+        return []  # unfortunately these are javascript-enabled by user interaction
