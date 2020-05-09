@@ -8,10 +8,10 @@ for parsing recipes from the williams-sonoma.com site.
 
 """
 
-from lxml import etree
 from urllib.parse import urlsplit
 
 from parser import RecipeParser
+
 
 class WilliamsSonoma(RecipeParser):
     def getTitle(self):
@@ -36,14 +36,14 @@ class WilliamsSonoma(RecipeParser):
         """Return a list or a map of the recipe ingredients"""
         data = []
         for node in self.tree.xpath('//li[@itemprop="ingredient"]'):
-            data.append( ''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getDirections(self):
         """Return a list or a map of the preparation instructions"""
         data = []
         for node in self.tree.xpath('//div[@class="directions"]'):
-            data.append( node.xpath('descendant-or-self::text()') )
+            data.append(node.xpath('descendant-or-self::text()'))
         return [_f for _f in [x.strip() for x in data[0]] if _f]
 
     def getTags(self):
