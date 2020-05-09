@@ -41,6 +41,9 @@ class AllRecipes(RecipeParser):
         data = []
         for node in self.tree.xpath('//span[@itemprop="recipeIngredient"]'):
                 data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
+        # some recipes use a different xpath
+        for node in self.tree.xpath('//span[@class="ingredients-item-name"]'):
+            data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getDirections(self):
