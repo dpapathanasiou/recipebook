@@ -8,22 +8,22 @@ for parsing recipes from the foodnetwork.com site.
 
 """
 
-from lxml import etree
 import re
 import json
 
 from parser import RecipeParser
 from settings import ENCODING
 
+
 class FoodNetwork(RecipeParser):
     def __init__(self, url, pageEncoding=ENCODING):
         RecipeParser.__init__(self, url, pageEncoding)
         # this site now has all the recipe data available as an embedded json object
         for node in self.tree.xpath('//*[@type="application/ld+json"]'):
-            self.recipeJSON = json.loads( u''.join(node.xpath('descendant-or-self::text()')) )
+            self.recipeJSON = json.loads(u''.join(node.xpath('descendant-or-self::text()')))
 
     # define some patterns to match/filter
-    otherURL  = re.compile(r'/recipes/', re.I)
+    otherURL = re.compile(r'/recipes/', re.I)
     seriesURL = re.compile(r'recipes$', re.I)
     sectionURL = re.compile(r'#', re.I)
 
@@ -82,7 +82,7 @@ class FoodNetwork(RecipeParser):
             if 'href' in link.keys():
                 l = link.get('href')
                 if self.otherURL.search(l) and \
-                  not self.seriesURL.search(l) and \
-                  not self.sectionURL.search(l):
+                        not self.seriesURL.search(l) and \
+                        not self.sectionURL.search(l):
                     data.append(l)
         return data
