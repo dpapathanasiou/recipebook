@@ -14,7 +14,8 @@ from io import BytesIO
 
 from settings import UA
 
-def get (url, encoding, user_agent=UA, referrer=None):
+
+def get(url, encoding, user_agent=UA, referrer=None):
     """Make a GET request of the url using pycurl and return the data
     (which is None if unsuccessful)"""
 
@@ -41,16 +42,19 @@ def get (url, encoding, user_agent=UA, referrer=None):
 
     return data
 
-def put (url, data, headers={}):
+
+def put(url, data, headers=None):
     """Make a PUT request to the url, using data in the message body,
     with the additional headers, if any"""
 
-    reply = -1 # default, non-http response
+    if headers is None:
+        headers = {}
+    reply = -1  # default, non-http response
 
     curl = pycurl.Curl()
     curl.setopt(pycurl.URL, url)
     if len(headers) > 0:
-        curl.setopt(pycurl.HTTPHEADER, [k+': '+v for k,v in list(headers.items())])
+        curl.setopt(pycurl.HTTPHEADER, [k + ': ' + v for k, v in list(headers.items())])
     curl.setopt(pycurl.PUT, 1)
     curl.setopt(pycurl.INFILESIZE, len(data))
     databuffer = StringIO(data)
