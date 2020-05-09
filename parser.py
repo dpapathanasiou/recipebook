@@ -24,7 +24,8 @@ import totpGenerator
 class RecipeParser:
     def __init__(self, url, pageEncoding=ENCODING):
         self.url = url
-        self.html = restClient.get(self.url, pageEncoding   )
+        self.encoding = pageEncoding
+        self.html = restClient.get(self.url, self.encoding)
         if self.html is not None:
             self.valid = True
             self.encode = pageEncoding
@@ -94,7 +95,7 @@ class RecipeParser:
                     'API-TOTP': totpGenerator.create(mongoService['API-SEED'])
                 }
                 target = '/'.join([mongoService['SERVER'], database, collection])
-                result = restClient.put(target, data, headers)
+                result = restClient.put(target, data, self.encoding, headers)
                 if result not in list(range(200, 205)):
                     print('[error] could not PUT', self.url, 'to', target, ':', result)
 

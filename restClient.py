@@ -9,7 +9,6 @@ actions using pycurl.
 """
 
 import pycurl
-from io import StringIO
 from io import BytesIO
 
 from settings import UA
@@ -43,7 +42,7 @@ def get(url, encoding, user_agent=UA, referrer=None):
     return data
 
 
-def put(url, data, headers=None):
+def put(url, data, encoding, headers=None):
     """Make a PUT request to the url, using data in the message body,
     with the additional headers, if any"""
 
@@ -57,8 +56,8 @@ def put(url, data, headers=None):
         curl.setopt(pycurl.HTTPHEADER, [k + ': ' + v for k, v in list(headers.items())])
     curl.setopt(pycurl.PUT, 1)
     curl.setopt(pycurl.INFILESIZE, len(data))
-    databuffer = StringIO(data)
-    curl.setopt(pycurl.READFUNCTION, databuffer.read)
+    databuffer = BytesIO(data.encode(encoding))
+    curl.setopt(pycurl.READDATA, databuffer)
     try:
         curl.perform()
         reply = curl.getinfo(pycurl.HTTP_CODE)
