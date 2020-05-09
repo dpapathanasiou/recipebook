@@ -20,18 +20,19 @@ import restClient
 from settings import ENCODING, OUTPUT_FOLDER, ARMS
 import totpGenerator
 
+
 class RecipeParser:
     def __init__(self, url, pageEncoding=ENCODING):
-        self.url  = url
-        self.html = restClient.get(self.url)
+        self.url = url
+        self.html = restClient.get(self.url, pageEncoding   )
         if self.html is not None:
-            self.valid  = True
+            self.valid = True
             self.encode = pageEncoding
             self.parser = etree.HTMLParser(encoding=self.encode)
-            self.tree   = etree.HTML(self.html, parser=self.parser)
+            self.tree = etree.HTML(self.html, parser=self.parser)
         else:
             self.valid = False
-            raise ValueError('could not fetch data from: ""'+self.url+'""')
+            raise ValueError('could not fetch data from: ""' + self.url + '""')
 
     def setSource(self):
         """Defaults to the 'netloc' portion of the url (can be overridden)"""
@@ -43,7 +44,10 @@ class RecipeParser:
 
     def setFilename(self):
         """Defaults to the last string in the url path, minus '.html|.htm' (can be overridden)"""
-        self.filename = [_f for _f in urlsplit(self.url).path.split('/') if _f][-1:][0].lower().replace('.html', '').replace('.htm', '')+'.json'
+        self.filename = [_f for _f in urlsplit(self.url).path.split('/') if _f][-1:][0]\
+                            .lower()\
+                            .replace('.html', '')\
+                            .replace('.htm', '') + '.json'
 
     def compose(self):
         """Compose the json object of the recipe data"""
@@ -51,14 +55,14 @@ class RecipeParser:
         self.setSource()
         self.setLanguage()
         return {
-          'source': self.source,
-          'language': self.language,
-          'title': self.getTitle(),
-          'image': self.getImage(),
-          'ingredients': self.getIngredients(),
-          'directions': self.getDirections(),
-          'tags': self.getTags(),
-          'url': self.url
+            'source': self.source,
+            'language': self.language,
+            'title': self.getTitle(),
+            'image': self.getImage(),
+            'ingredients': self.getIngredients(),
+            'directions': self.getDirections(),
+            'tags': self.getTags(),
+            'url': self.url
         }
 
     def save(self, folder=OUTPUT_FOLDER):
@@ -86,12 +90,12 @@ class RecipeParser:
                 print('[error] invalid data at:', self.url)
             else:
                 headers = {
-                  'API-KEY'  : mongoService['API-KEY'],
-                  'API-TOTP' : totpGenerator.create(mongoService['API-SEED'])
+                    'API-KEY': mongoService['API-KEY'],
+                    'API-TOTP': totpGenerator.create(mongoService['API-SEED'])
                 }
                 target = '/'.join([mongoService['SERVER'], database, collection])
                 result = restClient.put(target, data, headers)
-                if result not in list(range(200,205)):
+                if result not in list(range(200, 205)):
                     print('[error] could not PUT', self.url, 'to', target, ':', result)
 
     def getTitle(self):

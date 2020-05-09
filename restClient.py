@@ -10,22 +10,23 @@ actions using pycurl.
 
 import pycurl
 from io import StringIO
+from io import BytesIO
 
 from settings import UA
 
-def get (url, user_agent=UA, referrer=None):
+def get (url, encoding, user_agent=UA, referrer=None):
     """Make a GET request of the url using pycurl and return the data
     (which is None if unsuccessful)"""
 
     data = None
-    databuffer = StringIO()
+    databuffer = BytesIO()
 
     curl = pycurl.Curl()
     curl.setopt(pycurl.URL, url)
     curl.setopt(pycurl.FOLLOWLOCATION, 1)
     curl.setopt(pycurl.CONNECTTIMEOUT, 5)
     curl.setopt(pycurl.TIMEOUT, 8)
-    curl.setopt(pycurl.WRITEFUNCTION, databuffer.write)
+    curl.setopt(pycurl.WRITEDATA, databuffer)
     curl.setopt(pycurl.COOKIEFILE, '')
     if user_agent:
         curl.setopt(pycurl.USERAGENT, user_agent)
@@ -33,7 +34,7 @@ def get (url, user_agent=UA, referrer=None):
         curl.setopt(pycurl.REFERER, referrer)
     try:
         curl.perform()
-        data = databuffer.getvalue()
+        data = databuffer.getvalue().decode(encoding)
     except Exception:
         pass
     curl.close()
