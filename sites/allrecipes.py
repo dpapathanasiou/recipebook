@@ -39,7 +39,7 @@ class AllRecipes(RecipeParser):
     def getIngredients(self):
         """Return a list or a map of the recipe ingredients"""
         data = []
-        for node in self.tree.xpath('//span[@itemprop="ingredients"]'):
+        for node in self.tree.xpath('//span[@itemprop="recipeIngredient"]'):
             data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
