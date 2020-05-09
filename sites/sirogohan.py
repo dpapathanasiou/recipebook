@@ -9,13 +9,12 @@ for parsing recipes from the sirogohan.com site.
 
 """
 
-from lxml import etree
 import re
 
 from parser import RecipeParser
 
-class SiroGohan(RecipeParser):
 
+class SiroGohan(RecipeParser):
     # define some patterns to match/filter
     otherURL = re.compile(r'^/recipe/', re.I)
 
@@ -45,13 +44,13 @@ class SiroGohan(RecipeParser):
         data = []
         # the basic ingredients
         for node in self.tree.xpath('//div[@class="material-halfbox"]//ul[@class="disc-list"]/li'):
-            data.append( u''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(u''.join(node.xpath('descendant-or-self::text()')).strip())
         # the 'maru' ingredients
         for node in self.tree.xpath('//ul[@class="circle-list"]/li'):
-            data.append(u'○ ' + u''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(u'○ ' + u''.join(node.xpath('descendant-or-self::text()')).strip())
         # the 'A' ingredients
         for node in self.tree.xpath('//ul[@class="a-list"]/li'):
-            data.append(u'A ' + u''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(u'A ' + u''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getDirections(self):
@@ -59,10 +58,10 @@ class SiroGohan(RecipeParser):
         data = []
         # the basic instructions
         for node in self.tree.xpath('//div[@class="howto-block"]/*'):
-            data.append( u''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(u''.join(node.xpath('descendant-or-self::text()')).strip())
         # plus any hints
         for node in self.tree.xpath('//div[@class="point-text"]/*/li'):
-            data.append( u''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(u''.join(node.xpath('descendant-or-self::text()')).strip())
         return list(filter(None, data))
 
     def getTags(self):
@@ -70,7 +69,7 @@ class SiroGohan(RecipeParser):
         data = []
         for node in self.tree.xpath('//dt[@class="icon-keyword"]'):
             for link in node.xpath('//dd/a'):
-                data.append( ''.join(link.xpath('descendant-or-self::text()')).strip() )
+                data.append(''.join(link.xpath('descendant-or-self::text()')).strip())
         return list(filter(None, data))
 
     def getOtherRecipeLinks(self):
