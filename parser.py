@@ -11,7 +11,7 @@ somewhat differently.
 """
 
 from lxml import etree
-from urlparse import urlsplit
+from urllib.parse import urlsplit
 import json
 import codecs
 import os
@@ -43,7 +43,7 @@ class RecipeParser:
 
     def setFilename(self):
         """Defaults to the last string in the url path, minus '.html|.htm' (can be overridden)"""
-        self.filename = filter(None, urlsplit(self.url).path.split('/'))[-1:][0].lower().replace('.html', '').replace('.htm', '')+'.json'
+        self.filename = [_f for _f in urlsplit(self.url).path.split('/') if _f][-1:][0].lower().replace('.html', '').replace('.htm', '')+'.json'
 
     def compose(self):
         """Compose the json object of the recipe data"""
@@ -66,24 +66,24 @@ class RecipeParser:
 
         data = json.dumps(self.compose(), indent=4, sort_keys=True)
         if not self.valid:
-            print '[error] invalid data at:', self.url
+            print('[error] invalid data at:', self.url)
         else:
             self.setFilename()
             try:
                 with codecs.open(os.path.join(folder, self.filename), 'w', self.encode) as f:
                     f.write(data)
             except (OSError, IOError):
-                print '[error] could not write recipe json in:', os.path.join(folder, self.filename)
+                print('[error] could not write recipe json in:', os.path.join(folder, self.filename))
 
     def store(self, database, collection, mongoService=ARMS):
         """Attempt to store the resulting json data on a RESTful mongo service"""
 
-        if len(filter(None, mongoService.values())) != 3:
-            print '[error] mongo service not fully defined'
+        if len([_f for _f in list(mongoService.values()) if _f]) != 3:
+            print('[error] mongo service not fully defined')
         else:
             data = json.dumps(self.compose())
             if not self.valid:
-                print '[error] invalid data at:', self.url
+                print('[error] invalid data at:', self.url)
             else:
                 headers = {
                   'API-KEY'  : mongoService['API-KEY'],
@@ -91,8 +91,8 @@ class RecipeParser:
                 }
                 target = '/'.join([mongoService['SERVER'], database, collection])
                 result = restClient.put(target, data, headers)
-                if result not in range(200,205):
-                    print '[error] could not PUT', self.url, 'to', target, ':', result
+                if result not in list(range(200,205)):
+                    print('[error] could not PUT', self.url, 'to', target, ':', result)
 
     def getTitle(self):
         """Defaults to the <title> string in the html (can be overridden)"""

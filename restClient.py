@@ -9,7 +9,7 @@ actions using pycurl.
 """
 
 import pycurl
-from cStringIO import StringIO
+from io import StringIO
 
 from settings import UA
 
@@ -49,7 +49,7 @@ def put (url, data, headers={}):
     curl = pycurl.Curl()
     curl.setopt(pycurl.URL, url)
     if len(headers) > 0:
-        curl.setopt(pycurl.HTTPHEADER, [k+': '+v for k,v in headers.items()])
+        curl.setopt(pycurl.HTTPHEADER, [k+': '+v for k,v in list(headers.items())])
     curl.setopt(pycurl.PUT, 1)
     curl.setopt(pycurl.INFILESIZE, len(data))
     databuffer = StringIO(data)

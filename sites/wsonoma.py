@@ -9,7 +9,7 @@ for parsing recipes from the williams-sonoma.com site.
 """
 
 from lxml import etree
-from urlparse import urlsplit
+from urllib.parse import urlsplit
 
 from parser import RecipeParser
 
@@ -44,7 +44,7 @@ class WilliamsSonoma(RecipeParser):
         data = []
         for node in self.tree.xpath('//div[@class="directions"]'):
             data.append( node.xpath('descendant-or-self::text()') )
-        return filter(None, map(lambda x: x.strip(), data[0]))
+        return [_f for _f in [x.strip() for x in data[0]] if _f]
 
     def getTags(self):
         """Return a list of tags for this recipe"""
@@ -62,7 +62,7 @@ class WilliamsSonoma(RecipeParser):
         """
         data = []
         for link in self.tree.xpath('//ul[@class="recipe-list"]/li/a'):
-            if 'href' in link.keys():
+            if 'href' in list(link.keys()):
                 href = urlsplit(link.get('href'))
                 if 'cm_src=RECIPESEARCH' == href.query:
                     data.append(href.scheme + '://' + href.netloc + href.path)

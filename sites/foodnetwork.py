@@ -38,7 +38,7 @@ class FoodNetwork(RecipeParser):
             # use the json object data
             return self.recipeJSON['name']
         except (AttributeError, KeyError) as e:
-            print '[warning]: likely no recipe at', self.url
+            print('[warning]: likely no recipe at', self.url)
             # fall back to parsing the html title, which is colon-separated
             return self.tree.xpath('//title')[0].text.split(':')[0].strip()
 

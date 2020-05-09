@@ -8,7 +8,7 @@ results to crawl for other recipes automatically.
 
 """
 
-from Queue import Queue
+from queue import Queue
 from threading import Thread
 from random import seed, randint
 from time import sleep
@@ -57,9 +57,9 @@ def fetch (src, save, db, collection, p, f):
                 if db is not None and collection is not None:
                     recipe.store(db, collection)
                 f.put(url)
-                map(lambda x: p.put(x), filter(lambda link: link != url, recipe.getOtherRecipeLinks()))
+                list(map(lambda x: p.put(x), [link for link in recipe.getOtherRecipeLinks() if link != url]))
             except ValueError:
-                print '[warning] could not fetch:', url
+                print('[warning] could not fetch:', url)
             p.task_done()
             if PAUSE_CRAWLER:
                 # pause a random interval between PAUSE_TIME_RANGE seconds before continuing
@@ -71,13 +71,13 @@ if __name__ == "__main__":
     if len(sys.argv) < 4:
         # Define the usage
         possibleSources = sorted(AVAILABLE.keys())
-        print sys.argv[0], \
-          '[site: (' + u'|'.join(possibleSources) +')]', \
+        print(sys.argv[0], \
+          '[site: (' + '|'.join(possibleSources) +')]', \
           '[file of seed urls]', \
           '[threads]', \
           '[save() (defaults to True)]', \
           '[store() database (defaults to None)]', \
-          '[store() collection (defaults to None)]'
+          '[store() collection (defaults to None)]')
     else:
         # Do the deed
         if PAUSE_CRAWLER:
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
         module = site(sys.argv[1])
         if module is None:
-            print 'Sorry, that site is not yet available'
+            print('Sorry, that site is not yet available')
         else:
             threads = 1
             try:
@@ -116,11 +116,11 @@ if __name__ == "__main__":
             # load the file of initial urls and seed the pending queue
             with open(sys.argv[2], 'r') as f:
                 links = f.read()
-                map(lambda link: pending.put(link), links.splitlines())
+                list(map(lambda link: pending.put(link), links.splitlines()))
 
             pending.join()
 
             # show the summary
-            print 'Fetched and parsed:'
+            print('Fetched and parsed:')
             for i, link in enumerate(set(fetched.queue)):
-                print "{:,}".format(1+i), '\t', link
+                print("{:,}".format(1+i), '\t', link)

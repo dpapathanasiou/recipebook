@@ -16,7 +16,7 @@ from parser import RecipeParser
 class Epicurious(RecipeParser):
 
     # define some patterns to match/filter
-    badTag = re.compile(ur'Bon App\u00e9tit', re.I)
+    badTag = re.compile('Bon App\u00e9tit', re.I)
 
     def getTitle(self):
         """The title format is:
