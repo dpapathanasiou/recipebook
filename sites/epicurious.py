@@ -8,13 +8,12 @@ for parsing recipes from the epicurious.com site.
 
 """
 
-from lxml import etree
 import re
 
 from parser import RecipeParser
 
-class Epicurious(RecipeParser):
 
+class Epicurious(RecipeParser):
     # define some patterns to match/filter
     badTag = re.compile('Bon App\u00e9tit', re.I)
 
@@ -40,21 +39,21 @@ class Epicurious(RecipeParser):
         """Return a list or a map of the recipe ingredients"""
         data = []
         for node in self.tree.xpath('//li[@itemprop="ingredients"]'):
-            data.append( ''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getDirections(self):
         """Return a list or a map of the preparation instructions"""
         data = []
         for node in self.tree.xpath('//li[@class="preparation-step"]'):
-            data.append( ''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(''.join(node.xpath('descendant-or-self::text()')).strip())
         return data
 
     def getTags(self):
         """Return a list of tags for this recipe"""
         data = []
         for node in self.tree.xpath('//*[@itemprop="recipeCategory"]'):
-            data.append( u''.join(node.xpath('descendant-or-self::text()')).strip() )
+            data.append(u''.join(node.xpath('descendant-or-self::text()')).strip())
         return list(filter(lambda x: self.badTag.search(x) is None, data))
 
     def getOtherRecipeLinks(self):
@@ -62,7 +61,7 @@ class Epicurious(RecipeParser):
         data = []
         for link in self.tree.xpath('//div[contains(@class,"recipes")]/ul[contains(@class,"content")]/*/a'):
             if 'href' in link.keys():
-                l = 'http://www.epicurious.com'+link.get('href')
+                l = 'http://www.epicurious.com' + link.get('href')
                 if l not in data:
                     data.append(l)
         return data
