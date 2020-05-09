@@ -52,6 +52,13 @@ class AllRecipes(RecipeParser):
         for node in self.tree.xpath('//ol[@itemprop="recipeInstructions"][li]'):
             for item in node:
                 data.append(''.join(item.xpath('descendant-or-self::text()')).strip())
+        # some recipes use a different xpath
+        for node in self.tree.xpath('//li[@class="subcontainer instructions-section-item"]'):
+            for item in node:
+                text = ''.join(item.xpath('descendant-or-self::text()')).strip()
+                if text:
+                    if not text.startswith('Step ') and 'Advertisement' != text:
+                        data.append(text)
         return data
 
     def getTags(self):
