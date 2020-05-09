@@ -17,9 +17,9 @@ OUTPUT_FOLDER = '/tmp'
 
 # Define credentials for using a service running ARMS (http://github.com/dpapathanasiou/ARMS)
 ARMS = {
-  'SERVER'   : None,
-  'API-KEY'  : None,
-  'API-SEED' : None
+    'SERVER': None,
+    'API-KEY': None,
+    'API-SEED': None
 }
 
 # Override any of the above settings for your local environment in a
