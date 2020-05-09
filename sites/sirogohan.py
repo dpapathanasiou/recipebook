@@ -1,4 +1,4 @@
-    #!/usr/bin/env python
+#!/usr/bin/env python
 # coding: utf-8
 
 """
@@ -63,7 +63,7 @@ class SiroGohan(RecipeParser):
         # plus any hints
         for node in self.tree.xpath('//div[@class="point-text"]/*/li'):
             data.append( u''.join(node.xpath('descendant-or-self::text()')).strip() )
-        return filter(None, data)
+        return list(filter(None, data))
 
     def getTags(self):
         """Return a list of tags for this recipe"""
@@ -71,7 +71,7 @@ class SiroGohan(RecipeParser):
         for node in self.tree.xpath('//dt[@class="icon-keyword"]'):
             for link in node.xpath('//dd/a'):
                 data.append( ''.join(link.xpath('descendant-or-self::text()')).strip() )
-        return filter(None, data)
+        return list(filter(None, data))
 
     def getOtherRecipeLinks(self):
         """Return a list of other recipes found in the page"""

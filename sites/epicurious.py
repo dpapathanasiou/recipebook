@@ -55,7 +55,7 @@ class Epicurious(RecipeParser):
         data = []
         for node in self.tree.xpath('//*[@itemprop="recipeCategory"]'):
             data.append( u''.join(node.xpath('descendant-or-self::text()')).strip() )
-        return filter(lambda x: self.badTag.search(x) is None, data)
+        return list(filter(lambda x: self.badTag.search(x) is None, data))
 
     def getOtherRecipeLinks(self):
         """Return a list of other recipes found in the page"""

@@ -61,7 +61,7 @@ class Saveur(RecipeParser):
                     tag = u''.join(node.xpath('descendant-or-self::text()')).strip()
                     if not self.issueTag.search(tag):
                         data.append(tag)
-        return filter(None, data)
+        return list(filter(None, data))
 
     def getOtherRecipeLinks(self):
         """Return a list of other recipes found in the page"""

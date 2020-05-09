@@ -54,7 +54,7 @@ class FoodNetwork(RecipeParser):
     def getIngredients(self):
         """Return a list or a map of the recipe ingredients"""
         try:
-            return filter(None, map(lambda x: x.strip(), self.recipeJSON['recipeIngredient']))
+            return list(filter(None, map(lambda x: x.strip(), self.recipeJSON['recipeIngredient'])))
         except (AttributeError, KeyError):
             self.valid = False
             return []
@@ -62,7 +62,7 @@ class FoodNetwork(RecipeParser):
     def getDirections(self):
         """Return a list or a map of the preparation instructions"""
         try:
-            return filter(None, map(lambda x: x.strip(), self.recipeJSON['recipeInstructions']))
+            return list(filter(None, map(lambda x: x.strip(), self.recipeJSON['recipeInstructions'])))
         except (AttributeError, KeyError):
             self.valid = False
             return []
@@ -70,7 +70,7 @@ class FoodNetwork(RecipeParser):
     def getTags(self):
         """Return a list of tags for this recipe"""
         try:
-            return filter(None, map(lambda x: x.strip(), self.recipeJSON['recipeCategory']))
+            return list(filter(None, map(lambda x: x.strip(), self.recipeJSON['recipeCategory'])))
         except (AttributeError, KeyError):
             self.valid = False
             return []
